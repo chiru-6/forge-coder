@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Forge: your local coding workbench, powered by a small fine-tuned open model.">
+  <title>Forge · Coding workbench</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="./"><span class="brand-icon">f</span> forge<span class="brand-label">LOCAL AI</span></a>
+  <button id="new-chat" class="new-chat"><span>＋</span> New conversation</button>
+  <div class="section-label">YOUR WORKBENCH</div>
+  <nav aria-label="Assistant mode">
+    <button class="mode active" data-mode="build" aria-pressed="true"><span>⌘</span> Build <small>Write something new</small></button>
+    <button class="mode" data-mode="explain" aria-pressed="false"><span>≡</span> Explain <small>Understand the details</small></button>
+    <button class="mode" data-mode="debug" aria-pressed="false"><span>⊙</span> Debug <small>Find a better fix</small></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="model-card"><div class="section-label">UNDER THE HOOD</div><strong>Qwen2.5 Coder</strong><p>1.5B parameters · LoRA adapter</p><button id="model-info">Model & training details</button></div>
+    <p class="local-note">Your prompts stay on this computer when using the local server.</p>
+  </div>
+</aside>
+<main>
+  <header><div><span class="breadcrumb">Workspace /</span> <strong id="mode-title">Build</strong></div><span id="connection" class="connection">Checking local model…</span></header>
+  <div id="offline" class="offline" hidden>This is the website preview. To chat with your trained model, run <code>python server.py</code> and open <a href="http://127.0.0.1:8000">localhost:8000</a>. See the project README for setup.</div>
+  <section id="welcome" class="welcome">
+    <div class="eyebrow"><span></span> SMALL MODEL. YOUR WORKBENCH.</div>
+    <h1>A little help.<br><span>A lot to build.</span></h1>
+    <p class="intro">From a blank file to your next working idea.<br>Write, understand, and debug code with your own local assistant.</p>
+    <div class="suggestions">
+      <button data-prompt="Write a Python function that removes duplicate values from a list while preserving order. Explain its limitations."><span class="tile-icon">{ }</span><strong>Start with a function</strong><span>Remove duplicates in Python</span></button>
+      <button data-prompt="Explain this JavaScript code and what happens with an empty array: const total = values.reduce((sum, n) => sum + n, 0);" data-target-mode="explain"><span class="tile-icon">&lt;/&gt;</span><strong>Make code click</strong><span>Understand JavaScript reduce</span></button>
+      <button data-prompt="Fix this Python function and explain the bug:\ndef add_item(item, items=[]):\n    items.append(item)\n    return items" data-target-mode="debug"><span class="tile-icon">⌁</span><strong>Untangle a bug</strong><span>Fix a shared default argument</span></button>
+    </div>
+    <div class="workbench-note"><span class="tiny-square"></span> Open weights. Included training code. No API key.</div>
+  </section>
+  <section id="messages" class="messages" aria-label="Conversation" aria-live="polite"></section>
+  <div class="composer-wrap">
+    <div id="error" class="error" role="alert" hidden></div>
+    <form id="chat-form" class="composer">
+      <label for="prompt" class="sr-only">Message your coding assistant</label>
+      <textarea id="prompt" maxlength="6000" rows="3" placeholder="What are we building? Paste code or ask a question…" required></textarea>
+      <div class="composer-bottom"><span><span class="model-dot"></span> Forge · <span id="composer-mode">Build</span></span><div><span class="key-hint">Ctrl + Enter to send</span><button id="send" type="submit">Send message</button></div></div>
+    </form>
+    <p class="footnote">A small experimental model. Review and test generated code before using it.</p>
+  </div>
+</main>
+<dialog id="details"><div class="dialog-head"><span class="eyebrow">MODEL NOTES</span><button id="close-details" aria-label="Close model details">✕</button></div><h2>Your model, in the open.</h2><p>Forge adapts <a href="https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct" target="_blank" rel="noreferrer">Qwen2.5-Coder-1.5B-Instruct</a> with a small LoRA adapter. It is fine-tuned, not pretrained from scratch.</p><div id="training-stats">Loading training report…</div><p>Training uses original synthetic examples of basic Python and JavaScript. The base model supplies most capabilities; Explain and Debug also use mode instructions. Validation loss does not measure code correctness.</p><a class="report-link" href="training-report.json" target="_blank">Read the full training report</a></dialog>
+</body>
+</html>
+
